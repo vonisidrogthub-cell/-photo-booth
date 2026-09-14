@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Lou's 🌸</title>
+
+<style>
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: "Trebuchet MS", sans-serif;
+    background: linear-gradient(135deg, #ffd6e7, #fff0f6);
+    color: #8b3a62;
+    text-align: center;
+    min-height: 100vh;
+}
+
+/* HEADER */
+
+header {
+    padding: 35px 20px 15px;
+}
+
+header h1 {
+    font-size: 42px;
+    color: #d94f87;
+    text-shadow: 2px 2px white;
+}
+
+header p {
+    margin-top: 8px;
+}
+
+/* FLOWER */
+
+.flower-section {
+    background: rgba(255,255,255,.7);
+    width: 90%;
+    max-width: 700px;
+    margin: 20px auto;
+    padding: 30px 20px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(180,70,120,.15);
+}
+
+.flower-area {
+    height: 300px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    overflow: hidden;
+}
+
+.ground {
+    position: absolute;
+    bottom: 10px;
+    width: 170px;
+    height: 18px;
+    background: #d9a17c;
+    border-radius: 50%;
+}
+
+.stem {
+    position: absolute;
+    bottom: 25px;
+    width: 12px;
+    height: 0;
+    background: #69a85b;
+    border-radius: 10px;
+    transition: height 2s ease;
+}
+
+.leaf {
+    position: absolute;
+    width: 55px;
+    height: 25px;
+    background: #78b968;
+    border-radius: 100% 0 100% 0;
+    opacity: 0;
+    transition: opacity 1s;
+}
+
+.leaf.left {
+    bottom: 105px;
+    left: calc(50% - 65px);
+    transform: rotate(-25deg);
+}
+
+.leaf.right {
+    bottom: 140px;
+    left: calc(50% + 10px);
+    transform: rotate(25deg) scaleX(-1);
+}
+
+.flower {
+    position: absolute;
+    bottom: 200px;
+    width: 130px;
+    height: 130px;
+    transform: scale(0);
+    transition: transform 1.5s cubic-bezier(.17,.67,.38,1.5);
+}
+
+.petal {
+    position: absolute;
+    width: 65px;
+    height: 90px;
+    background: #ff75a9;
+    border-radius: 50%;
+    left: 32px;
+    top: 20px;
+    transform-origin: 50% 100%;
+}
+
+.petal:nth-child(1) {
+    transform: rotate(0deg) translateY(-25px);
+}
+
+.petal:nth-child(2) {
+    transform: rotate(72deg) translateY(-25px);
+}
+
+.petal:nth-child(3) {
+    transform: rotate(144deg) translateY(-25px);
+}
+
+.petal:nth-child(4) {
+    transform: rotate(216deg) translateY(-25px);
+}
+
+.petal:nth-child(5) {
+    transform: rotate(288deg) translateY(-25px);
+}
+
+.center {
+    position: absolute;
+    width: 45px;
+    height: 45px;
+    background: #ffd34e;
+    border-radius: 50%;
+    left: 42px;
+    top: 43px;
+}
+
+.bloomed .stem {
+    height: 190px;
+}
+
+.bloomed .flower {
+    transform: scale(1);
+}
+
+.bloomed .leaf {
+    opacity: 1;
+}
+
+/* BUTTONS */
+
+button {
+    border: none;
+    background: #e85b91;
+    color: white;
+    padding: 13px 25px;
+    border-radius: 30px;
+    font-size: 16px;
+    cursor: pointer;
+    margin: 8px;
+    transition: .3s;
+}
+
+button:hover {
+    background: #cf3f77;
+    transform: translateY(-2px);
+}
+
+/* PHOTOBOOTH */
+
+.photobooth {
+    width: 90%;
+    max-width: 850px;
+    margin: 30px auto 60px;
+    background: rgba(255,255,255,.8);
+    padding: 30px;
+    border-radius: 25px;
+    box-shadow: 0 10px 30px rgba(180,70,120,.15);
+}
+
+.photobooth h2 {
+    color: #d94f87;
+    font-size: 30px;
+}
+
+.upload {
+    margin: 20px;
+}
+
+input[type="file"] {
+    display: none;
+}
+
+.upload-label {
+    display: inline-block;
+    padding: 13px 25px;
+    background: #f38ab3;
+    color: white;
+    border-radius: 30px;
+    cursor: pointer;
+}
+
+/* FRAME SELECTOR */
+
+.frame-title {
+    margin-top: 20px;
+    margin-bottom: 12px;
+    color: #d94f87;
+}
+
+.frames {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.frame-btn {
+    background: #fff;
+    color: #d94f87;
+    border: 3px solid #ffc2d9;
+    padding: 10px 15px;
+    border-radius: 15px;
+    font-size: 14px;
+}
+
+.frame-btn:hover,
+.frame-btn.selected {
+    background: #ffd1e2;
+    border-color: #e85b91;
+}
+
+/* PREVIEW */
+
+.preview {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin: 25px auto;
+    max-width: 700px;
+}
+
+.photo-box {
+    position: relative;
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.photo-box img {
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    object-fit: cover;
+    display: block;
+}
+
+/* FRAME STYLES */
+
+.frame-pink {
+    border: 8px solid #ff9fc3;
+    box-shadow: 0 0 0 4px white;
+}
+
+.frame-heart {
+    border: 8px solid #ffb6d1;
+    box-shadow: 0 0 0 4px white;
+}
+
+.frame-flower {
+    border: 8px solid #ffc1dc;
+    box-shadow: 0 0 0 4px white;
+}
+
+.frame-bow {
+    border: 8px solid #f7b1cc;
+    box-shadow: 0 0 0 4px white;
+}
+
+/* DECORATIONS */
+
+.decoration {
+    position: absolute;
+    z-index: 5;
+    font-size: 25px;
+    pointer-events: none;
+}
+
+.heart1 {
+    top: 5px;
+    left: 5px;
+}
+
+.heart2 {
+    bottom: 5px;
+    right: 5px;
+}
+
+.flower1 {
+    top: 5px;
+    right: 5px;
+}
+
+.flower2 {
+    bottom: 5px;
+    left: 5px;
+}
+
+.bow1 {
+    top: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+.bow2 {
+    bottom: 3px;
+    left: 50%;
+    transform: translateX(-50%);
+}
+
+/* PHOTO STRIP */
+
+.strip-container {
+    margin-top: 30px;
+}
+
+.photo-strip {
+    background: #ffb6d1;
+    padding: 15px;
+    width: 270px;
+    margin: auto;
+    border-radius: 12px;
+    box-shadow: 0 8px 25px rgba(160,50,100,.2);
+}
+
+.strip-photo {
+    position: relative;
+    margin-bottom: 10px;
+}
+
+.strip-photo img {
+    width: 100%;
+    display: block;
+    border-radius: 5px;
+}
+
+.strip-photo .decoration {
+    font-size: 24px;
+}
+
+.strip-title {
+    background: white;
+    padding: 10px;
+    color: #d94f87;
+    font-weight: bold;
+    border-radius: 5px;
+}
+
+#downloadBtn {
+    display: none;
+}
+
+/* HEART ANIMATION */
+
+.heart {
+    position: fixed;
+    bottom: -30px;
+    font-size: 20px;
+    animation: float 6s linear infinite;
+    opacity: .5;
+    pointer-events: none;
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0) rotate(0);
+        opacity: 0;
+    }
+
+    20% {
+        opacity: .7;
+    }
+
+    100% {
+        transform: translateY(-110vh) rotate(360deg);
+        opacity: 0;
+    }
+}
+
+/* MOBILE */
+
+@media(max-width:600px) {
+
+    header h1 {
+        font-size: 32px;
+    }
+
+    .preview {
+        grid-template-columns: repeat(2,1fr);
+    }
+
+    .photobooth {
+        padding: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>🌸 Bloom & Bloom 🌸</h1>
+    <p>A little garden full of memories 💗</p>
+</header>
+
+
+<!-- FLOWER -->
+
+<section class="flower-section">
+
+    <h2>Watch the Flower Bloom 🌷</h2>
+    <p>Click the button and let it grow!</p>
+
+    <div class="flower-area" id="flowerArea">
+
+        <div class="ground"></div>
+
+        <div class="stem"></div>
+
+        <div class="leaf left"></div>
+        <div class="leaf right"></div>
+
+        <div class="flower">
+
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+            <div class="petal"></div>
+
+            <div class="center"></div>
+
+        </div>
+
+    </div>
+
+    <button onclick="bloomFlower()">
+        🌸 Bloom the Flower
+    </button>
+
+</section>
+
+
+<!-- PHOTOBOOTH -->
+
+<section class="photobooth">
+
+    <h2>📸 Pink Photobooth</h2>
+
+    <p>Choose up to 4 photos and decorate your memories!</p>
+
+    <div class="upload">
+
+        <label class="upload-label" for="photoInput">
+            📷 Choose Photos
+        </label>
+
+        <input
+            type="file"
+            id="photoInput"
+            accept="image/*"
+            multiple
+        >
+
+    </div>
+
+
+    <!-- FRAME BUTTONS -->
+
+    <h3 class="frame-title">
+        Choose Your Cute Frame 💕
+    </h3>
+
+    <div class="frames">
+
+        <button class="frame-btn selected"
+                onclick="selectFrame('pink', this)">
+            🎀 Pink
+        </button>
+
+        <button class="frame-btn"
+                onclick="selectFrame('heart', this)">
+            💗 Hearts
+        </button>
+
+        <button class="frame-btn"
+                onclick="selectFrame('flower', this)">
+            🌸 Flowers
+        </button>
+
+        <button class="frame-btn"
+                onclick="selectFrame('bow', this)">
+            🎀 Bow
+        </button>
+
+    </div>
+
+
+    <!-- PHOTO PREVIEW -->
+
+    <div class="preview" id="preview"></div>
+
+
+    <!-- PHOTO STRIP -->
+
+    <div class="strip-container">
+
+        <div class="photo-strip" id="photoStrip">
+
+            <div id="stripPhotos"></div>
+
+            <div class="strip-title">
+                🌸 @ von 🌸
+            </div>
+
+        </div>
+
+        <button id="downloadBtn" onclick="downloadStrip()">
+            💾 Download Photobooth
+        </button>
+
+    </div>
+
+</section>
+
+
+<script>
+
+/* FLOWER */
+
+function bloomFlower() {
+
+    document
+        .getElementById("flowerArea")
+        .classList.toggle("bloomed");
+
+}
+
+
+/* FRAME */
+
+let selectedFrame = "pink";
+
+function selectFrame(frame, button) {
+
+    selectedFrame = frame;
+
+    document
+        .querySelectorAll(".frame-btn")
+        .forEach(btn => btn.classList.remove("selected"));
+
+    button.classList.add("selected");
+
+    updatePhotos();
+
+}
+
+
+/* PHOTOS */
+
+let selectedFiles = [];
+
+const photoInput =
+    document.getElementById("photoInput");
+
+photoInput.addEventListener("change", function() {
+
+    selectedFiles =
+        Array.from(this.files).slice(0,4);
+
+    updatePhotos();
+
+});
+
+
+function updatePhotos() {
+
+    const preview =
+        document.getElementById("preview");
+
+    const stripPhotos =
+        document.getElementById("stripPhotos");
+
+    preview.innerHTML = "";
+    stripPhotos.innerHTML = "";
+
+    selectedFiles.forEach(file => {
+
+        const reader = new FileReader();
+
+        reader.onload = function(event) {
+
+            /* PREVIEW */
+
+            const box =
+                document.createElement("div");
+
+            box.className =
+                "photo-box frame-" + selectedFrame;
+
+            const img =
+                document.createElement("img");
+
+            img.src = event.target.result;
+
+            box.appendChild(img);
+
+            addDecoration(box);
+
+            preview.appendChild(box);
+
+
+            /* STRIP */
+
+            const stripBox =
+                document.createElement("div");
+
+            stripBox.className =
+                "strip-photo frame-" + selectedFrame;
+
+            const stripImg =
+                document.createElement("img");
+
+            stripImg.src =
+                event.target.result;
+
+            stripBox.appendChild(stripImg);
+
+            addDecoration(stripBox);
+
+            stripPhotos.appendChild(stripBox);
+
+        };
+
+        reader.readAsDataURL(file);
+
+    });
+
+    if(selectedFiles.length > 0) {
+
+        document
+            .getElementById("downloadBtn")
+            .style.display = "inline-block";
+
+    } else {
+
+        document
+            .getElementById("downloadBtn")
+            .style.display = "none";
+
+    }
+
+}
+
+
+/* DECORATIONS */
+
+function addDecoration(element) {
+
+    if(selectedFrame === "heart") {
+
+        const d1 =
+            document.createElement("span");
+
+        d1.className =
+            "decoration heart1";
+
+        d1.innerHTML = "💗";
+
+        const d2 =
+            document.createElement("span");
+
+        d2.className =
+            "decoration heart2";
+
+        d2.innerHTML = "💕";
+
+        element.appendChild(d1);
+        element.appendChild(d2);
+
+    }
+
+    if(selectedFrame === "flower") {
+
+        const d1 =
+            document.createElement("span");
+
+        d1.className =
+            "decoration flower1";
+
+        d1.innerHTML = "🌸";
+
+        const d2 =
+            document.createElement("span");
+
+        d2.className =
+            "decoration flower2";
+
+        d2.innerHTML = "🌷";
+
+        element.appendChild(d1);
+        element.appendChild(d2);
+
+    }
+
+    if(selectedFrame === "bow") {
+
+        const d1 =
+            document.createElement("span");
+
+        d1.className =
+            "decoration bow1";
+
+        d1.innerHTML = "🎀";
+
+        const d2 =
+            document.createElement("span");
+
+        d2.className =
+            "decoration bow2";
+
+        d2.innerHTML = "🎀";
+
+        element.appendChild(d1);
+        element.appendChild(d2);
+
+    }
+
+}
+
+
+/* DOWNLOAD */
+
+function downloadStrip() {
+
+    const images =
+        document.querySelectorAll("#stripPhotos img");
+
+    if(images.length === 0) {
+
+        alert("Please choose photos first! 📸");
+
+        return;
+    }
+
+    const canvas =
+        document.createElement("canvas");
+
+    const width = 520;
+    const imageWidth = 460;
+    const imageHeight = 460;
+    const padding = 30;
+
+    canvas.width = width;
+
+    canvas.height =
+        padding +
+        (imageHeight + 25) * images.length +
+        100;
+
+    const ctx =
+        canvas.getContext("2d");
+
+    /* BACKGROUND */
+
+    ctx.fillStyle = "#ffb6d1";
+
+    ctx.fillRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    let loaded = 0;
+
+    images.forEach((img,index) => {
+
+        const image =
+            new Image();
+
+        image.onload = function() {
+
+            const x =
+                (width - imageWidth) / 2;
+
+            const y =
+                padding +
+                index * (imageHeight + 25);
+
+            /* FRAME */
+
+            if(selectedFrame === "pink") {
+
+                ctx.fillStyle = "#ff8fba";
+
+            } else if(selectedFrame === "heart") {
+
+                ctx.fillStyle = "#ffb6d1";
+
+            } else if(selectedFrame === "flower") {
+
+                ctx.fillStyle = "#ffc1dc";
+
+            } else {
+
+                ctx.fillStyle = "#f7b1cc";
+
+            }
+
+            ctx.fillRect(
+                x - 8,
+                y - 8,
+                imageWidth + 16,
+                imageHeight + 16
+            );
+
+            /* IMAGE */
+
+            ctx.drawImage(
+                image,
+                x,
+                y,
+                imageWidth,
+                imageHeight
+            );
+
+            /* DECORATIONS */
+
+            ctx.font = "30px Arial";
+
+            if(selectedFrame === "heart") {
+
+                ctx.fillText("💗",x+5,y+35);
+                ctx.fillText(
+                    "💕",
+                    x+imageWidth-40,
+                    y+imageHeight-5
+                );
+
+            }
+
+            if(selectedFrame === "flower") {
+
+                ctx.fillText("🌸",x+5,y+35);
+                ctx.fillText(
+                    "🌷",
+                    x+imageWidth-40,
+                    y+imageHeight-5
+                );
+
+            }
+
+            if(selectedFrame === "bow") {
+
+                ctx.fillText(
+                    "🎀",
+                    x+imageWidth/2-15,
+                    y+30
+                );
+
+                ctx.fillText(
+                    "🎀",
+                    x+imageWidth/2-15,
+                    y+imageHeight-5
+                );
+
+            }
+
+            loaded++;
+
+            if(loaded === images.length) {
+
+                /* TITLE */
+
+                ctx.fillStyle = "white";
+
+                ctx.fillRect(
+                    30,
+                    canvas.height-75,
+                    width-60,
+                    50
+                );
+
+                ctx.fillStyle = "#d94f87";
+
+                ctx.font =
+                    "bold 22px Trebuchet MS";
+
+                ctx.textAlign = "center";
+
+                ctx.fillText(
+                    "🌸 Blooming Memories 🌸",
+                    width/2,
+                    canvas.height-42
+                );
+
+
+                /* DOWNLOAD */
+
+                const link =
+                    document.createElement("a");
+
+                link.download =
+                    "cute-blooming-photobooth.png";
+
+                link.href =
+                    canvas.toDataURL("image/png");
+
+                link.click();
+
+            }
+
+        };
+
+        image.src = img.src;
+
+    });
+
+}
+
+
+/* FLOATING HEARTS */
+
+function createHeart() {
+
+    const heart =
+        document.createElement("div");
+
+    heart.className = "heart";
+
+    heart.innerHTML =
+        Math.random() > .5
+        ? "💗"
+        : "🌸";
+
+    heart.style.left =
+        Math.random() * 100 + "vw";
+
+    heart.style.animationDuration =
+        (4 + Math.random() * 4) + "s";
+
+    document.body.appendChild(heart);
+
+    setTimeout(() => {
+        heart.remove();
+    },8000);
+
+}
+
+setInterval(createHeart,700);
+
+</script>
+
+</body>
+</html>
+
